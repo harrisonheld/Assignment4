@@ -21,6 +21,8 @@ let petImage;
 let foodBowlImage;
 let foodHeartImage;
 
+let resetGameButton;
+
 let food = 0.5;
 let happiness = 0.5;
 let age = 0.0;
@@ -54,6 +56,10 @@ function setup() {
     kissButton.position(125, CANVAS_HEIGHT - 45);
     kissButton.mousePressed(kiss);
 
+    resetGameButton = createButton('New Game');
+    resetGameButton.position(200, 200)
+    resetGameButton.mousePressed(resetGame);
+
     // decrease stats over time
     decayInterval = 100 // how often to alter stats, in milliseconds
     setInterval(() => {
@@ -61,6 +67,16 @@ function setup() {
         age += secondsElapsed / lifespan;
         food -= secondsElapsed / hungerspeed;
     }, decayInterval)
+
+    resetGame();
+}
+
+function resetGame() {
+    food = 0.5;
+    happiness = 0.5;
+    age = 0.0;
+    gameStatus = STATUS_INPLAY;
+    resetGameButton.hide();
 }
 
 
@@ -141,16 +157,15 @@ function draw()
         }
 
         if(food > 1) {
-            gameoverMessage = "You have overfed your pet " + petName + ". For this gluttony, the beast has been condemned to death.";
-            gameStatus = STATUS_GAMEOVER;
+            endGame("You have overfed your pet " + petName + ". For this gluttony, the beast has been condemned to death.");
+
         }
         else if(food < 0) {
-            gameoverMessage = "Through your fault and your alone, your pet " + petName + " has succumbed to starvation and died a cruel death.";
-            gameStatus = STATUS_GAMEOVER;
+            endGame("Through your fault and your alone, your pet " + petName + " has succumbed to starvation and died a cruel death.");
+
         }
         if(age > 1) {
-            gameoverMessage = "The cold maw of time has at last devoured your pet " + petName + " raw. Your pet has expired of old age.";
-            gameStatus = STATUS_GAMEOVER;
+            endGame("The cold maw of time has at last devoured your pet " + petName + " raw. Your pet has expired of old age.");
         }
     }
 
@@ -163,6 +178,12 @@ function draw()
     if(gameStatus === STATUS_GAMEOVER) {
         displayGameover();
     }
+}
+
+function endGame(reason) {
+    gameStatus = STATUS_GAMEOVER;
+    gameoverMessage = reason;
+    resetGameButton.show();
 }
 
 function displayGameover() {
