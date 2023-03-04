@@ -154,15 +154,15 @@ function draw()
         }
     }
 
-    if(gameStatus === STATUS_GAMEOVER) {
-        displayGameover();
-    }
-
     // draw emoticons
     if(showingFoodBowl)
         image(foodBowlImage, 75, 150, 150, 150);
     if(showingFoodHeart)
         image(foodHeartImage, 75, 150, 150, 150);
+
+    if(gameStatus === STATUS_GAMEOVER) {
+        displayGameover();
+    }
 }
 
 function displayGameover() {
