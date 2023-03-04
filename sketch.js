@@ -112,7 +112,7 @@ function draw()
         rect(125+2, 65+2, 196 * happiness, 10-4)
         rect(125+2, 85+2, 196 * (1-age), 10-4)
         // tooltips
-        if(mouseX > 125 && mouseX < 125 + 200 && mouseY > 45 && mouseY < 45 + 10) {
+        if(mouseX > 125 - 5 && mouseX < 125 + 200 + 5 && mouseY > 45 - 5 && mouseY < 45 + 10 + 5) {
             push();
             fill(255);
             stroke(0);
@@ -121,7 +121,7 @@ function draw()
             text("Your pet " + petName + " requires food to function: " + food.toFixed(2)*100 + "%", mouseX, mouseY)
             pop();
         }
-        if(mouseX > 125 && mouseX < 125 + 200 && mouseY > 65 && mouseY < 65 + 10) {
+        if(mouseX > 125 - 5 && mouseX < 125 + 200 + 5 && mouseY > 65 - 5 && mouseY < 65 + 10 + 5) {
             push();
             fill(255);
             stroke(0);
@@ -130,7 +130,7 @@ function draw()
             text("Optionally, you may keep your pet " + petName + " happy: " + happiness.toFixed(2)*100 + "%", mouseX, mouseY)
             pop();
         }
-        if(mouseX > 125 && mouseX < 125 + 200 && mouseY > 85 && mouseY < 85 + 10) {
+        if(mouseX > 125 - 5 && mouseX < 125 + 200 + 5 && mouseY > 85 - 5 && mouseY < 85 + 10 + 5) {
             push();
             fill(255);
             stroke(0);
