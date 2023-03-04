@@ -13,16 +13,23 @@ let COLOR_STATUS_BAR_BACKGROUND;
 let COLOR_STATUS_BAR_FILLED;
 let COLOR_MAROON;
 
+let STATUS_INPLAY = "STATUS_INPLAY";
+let STATUS_GAMEOVER = "STATUS_GAMEOVER";
+let gameStatus = STATUS_INPLAY;
+
 let petImage;
 let foodBowlImage;
 let foodHeartImage;
 
 let food = 0.5;
 let happiness = 0.5;
-let age = 0.1;
+let age = 0.0;
 
 let petName = 'Rune Bear';
 let lifespan = 60; // how many seconds the pet lives
+let hungerspeed = 60; // how many seconds it takes for the pet to starve
+
+let gameoverMessage = "The game is over";
 
 function preload() {
     petImage = loadImage('assets/runebear.png');
@@ -47,12 +54,13 @@ function setup() {
     kissButton.position(125, CANVAS_HEIGHT - 45);
     kissButton.mousePressed(kiss);
 
-    // aging
-    agingInterval = 100 // how often to age in milliseconds
+    // decrease stats over time
+    decayInterval = 100 // how often to alter stats, in milliseconds
     setInterval(() => {
-        let secondsElapsed = agingInterval / 1000;
+        let secondsElapsed = decayInterval / 1000;
         age += secondsElapsed / lifespan;
-    }, agingInterval)
+        food -= secondsElapsed / hungerspeed;
+    }, decayInterval)
 }
 
 
@@ -83,29 +91,72 @@ function draw()
     textSize(50)
     text(petName, 375, 75)
 
-    // draw status bars
-    textSize(14)
-    text('Food', 25, 55)
-    text('Happiness', 25, 75)
-    text('Senescence', 25, 95)
-    // draw backgrounds
-    fill(COLOR_STATUS_BAR_BACKGROUND)
-    rect(125, 45, 200, 10)
-    rect(125, 65, 200, 10)
-    rect(125, 85, 200, 10)
-    // fill in
-    fill(COLOR_STATUS_BAR_FILLED)
-    rect(125+2, 45+2, 200 * food, 10-4)
-    rect(125+2, 65+2, 200 * happiness, 10-4)
-    rect(125+2, 85+2, 200 * (1-age), 10-4)
-
     // draw pet
     image(petImage, 50, 125, CANVAS_WIDTH - 100, CANVAS_HEIGHT - 200);
 
-    //displayGameover("Through your fault and your alone, your pet " + petName + "\nhas succumbed to starvation and died a cruel death.")
-    //displayGameover("The cold tendrils of time have at last ensnared your wretched beast.\nYour pet " + petName + " has succumbed to old age.")
-    if(food > 1)
-        displayGameover("You have overfed your pet " + petName + ".\nFor this gluttony, the beast has been condemned to death.")
+
+    if(gameStatus === STATUS_INPLAY) {
+        // draw status bars
+        textSize(14)
+        text('Food', 25, 55)
+        text('Happiness', 25, 75)
+        text('Senescence', 25, 95)
+        // draw backgrounds
+        fill(COLOR_STATUS_BAR_BACKGROUND)
+        rect(125, 45, 200, 10)
+        rect(125, 65, 200, 10)
+        rect(125, 85, 200, 10)
+        // fill in
+        fill(COLOR_STATUS_BAR_FILLED)
+        rect(125+2, 45+2, 196 * food, 10-4)
+        rect(125+2, 65+2, 196 * happiness, 10-4)
+        rect(125+2, 85+2, 196 * (1-age), 10-4)
+        // tooltips
+        if(mouseX > 125 && mouseX < 125 + 200 && mouseY > 45 && mouseY < 45 + 10) {
+            push();
+            fill(255);
+            stroke(0);
+            textSize(20);
+            strokeWeight(5);
+            text("Your pet " + petName + " requires food to function: " + food.toFixed(2)*100 + "%", mouseX, mouseY)
+            pop();
+        }
+        if(mouseX > 125 && mouseX < 125 + 200 && mouseY > 65 && mouseY < 65 + 10) {
+            push();
+            fill(255);
+            stroke(0);
+            textSize(20);
+            strokeWeight(5);
+            text("Optionally, you may keep your pet " + petName + " happy: " + happiness.toFixed(2)*100 + "%", mouseX, mouseY)
+            pop();
+        }
+        if(mouseX > 125 && mouseX < 125 + 200 && mouseY > 85 && mouseY < 85 + 10) {
+            push();
+            fill(255);
+            stroke(0);
+            textSize(20);
+            strokeWeight(5);
+            text("Senescence is the process by which biological agents die of old age.\nThere is nothing you can do to mitigate this: " + (1-age).toFixed(2)*100 + "%", mouseX, mouseY-20)
+            pop();
+        }
+
+        if(food > 1) {
+            gameoverMessage = "You have overfed your pet " + petName + ". For this gluttony, the beast has been condemned to death.";
+            gameStatus = STATUS_GAMEOVER;
+        }
+        else if(food < 0) {
+            gameoverMessage = "Through your fault and your alone, your pet " + petName + " has succumbed to starvation and died a cruel death.";
+            gameStatus = STATUS_GAMEOVER;
+        }
+        if(age > 1) {
+            gameoverMessage = "The cold maw of time has at last devoured your pet " + petName + " raw. Your pet has expired of old age.";
+            gameStatus = STATUS_GAMEOVER;
+        }
+    }
+
+    if(gameStatus === STATUS_GAMEOVER) {
+        displayGameover();
+    }
 
     // draw emoticons
     if(showingFoodBowl)
@@ -114,7 +165,7 @@ function draw()
         image(foodHeartImage, 75, 150, 150, 150);
 }
 
-function displayGameover(reason) {
+function displayGameover() {
     fill(0)
     rect(75, 75, CANVAS_WIDTH - 150, CANVAS_HEIGHT - 150)
     fill(255)
@@ -122,7 +173,7 @@ function displayGameover(reason) {
     text('DECEASED', 100, 150)
 
     textSize(20)
-    text(reason, 100, 200)
+    text(gameoverMessage, 100, 200, CANVAS_WIDTH - 150 - 100, CANVAS_HEIGHT - 200)
 }
 
 function loadCamera() {
