@@ -57,7 +57,7 @@ function setup() {
     kissButton.mousePressed(kiss);
 
     resetGameButton = createButton('New Game');
-    resetGameButton.position(200, 200)
+    resetGameButton.position(200, 500)
     resetGameButton.mousePressed(resetGame);
 
     // decrease stats over time
