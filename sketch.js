@@ -25,6 +25,12 @@ let heartImage;
 let showingFoodBowl = false
 let showingHeart = false
 
+let showStats = false;
+let showStatsButton;
+let hungerIcon;
+let happinessIcon;
+let ageIcon;
+
 let startButton;
 let resetGameButton;
 let fileButton;
@@ -44,6 +50,10 @@ function preload() {
     petImage = loadImage('assets/runebear.png');
     foodBowlImage = loadImage('assets/foodbowl.png');
     heartImage = loadImage('assets/foodheart.png');
+
+    hungerIcon = loadImage('assets/hungericon.png');
+    happinessIcon = loadImage('assets/hapinessicon.png');
+    ageIcon = loadImage('assets/ageicon.png');
 }
 
 function setup() {
@@ -54,6 +64,10 @@ function setup() {
     COLOR_MAROON = color(80, 0, 0);
 
     createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+
+    showStatsButton = createButton('Toggle Stats');
+    showStatsButton.position(CANVAS_WIDTH-20 - showStatsButton.width, 20);
+    showStatsButton.mousePressed(() => showStats = !showStats);
 
     feedButton = createButton('Feed your pet');
     feedButton.position(20, CANVAS_HEIGHT - 45);
@@ -174,6 +188,23 @@ function draw()
             image(foodBowlImage, 75, 150, 150, 150);
         if(showingHeart)
             image(heartImage, 75, 150, 150, 150);
+
+        // show stats
+        if(showStats) {
+            fill(0)
+            rect(CANVAS_WIDTH-20-150,20,150,150);
+            iconX = CANVAS_WIDTH-150-20+10;
+            image(hungerIcon, iconX,40, 40, 40)
+            image(happinessIcon, iconX,80, 40, 40)
+            image(ageIcon, iconX,120, 40, 40)
+            fill(255)
+            textSize(40)
+            textX = iconX + 40;
+            // write rounded stats as percentage
+            text(food.toFixed(2)*100 + "%", textX, 80);
+            text(happiness.toFixed(2)*100 + "%", textX, 120);
+            text(age.toFixed(2)*100 + "%", textX, 160);
+        }
 
         // tooltips
         if(mouseX > 125 - 5 && mouseX < 125 + 200 + 5 && mouseY > 45 - 5 && mouseY < 45 + 10 + 5) {
