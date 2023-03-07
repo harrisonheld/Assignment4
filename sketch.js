@@ -66,6 +66,7 @@ function setup() {
         let secondsElapsed = decayInterval / 1000;
         age += secondsElapsed / lifespan;
         food -= secondsElapsed / hungerspeed;
+        happiness -= secondsElapsed / 180;
     }, decayInterval)
 
     resetGame();
@@ -79,10 +80,12 @@ function resetGame() {
     resetGameButton.hide();
 }
 
-
 showingFoodBowl = false
 showingFoodHeart = false
+
 function feed() {
+    showingFoodBowl = false
+    showingFoodHeart = false    
     food += 0.1
     // Display a bowl of food emoticon and then a heart.
     showingFoodBowl = true
@@ -91,7 +94,10 @@ function feed() {
 }
 
 function kiss(){
-
+    happiness += 0.1
+    // Display a bowl of food emoticon and then a heart.
+    showingFoodHeart = true
+    setTimeout(() => {showingFoodHeart = false}, 1500)
 }
 
 function draw()
@@ -160,7 +166,7 @@ function draw()
             endGame("You have overfed your pet " + petName + ". For this gluttony, the beast has been condemned to death.");
 
         }
-        else if(food < 0) {
+        else if(food <= 0) {
             endGame("Through your fault and your alone, your pet " + petName + " has succumbed to starvation and died a cruel death.");
 
         }
