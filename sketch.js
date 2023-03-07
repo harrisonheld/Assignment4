@@ -174,14 +174,18 @@ function draw()
 
         if(food > 1) {
             endGame("You have overfed your pet " + petName + ". For this gluttony, the beast has been condemned to death.");
-
         }
-        else if(food <= 0) {
-            endGame("Through your fault and your alone, your pet " + petName + " has succumbed to starvation and died a cruel death.");
-
+        else if(food < 0) {
+            endGame("Through your fault alone, your pet " + petName + " has succumbed to starvation and died.");
         }
         if(age > 1) {
             endGame("The cold maw of time has at last devoured your pet " + petName + " raw. Your pet has expired of old age.");
+        }
+        if(happiness < 0) {
+            endGame("Your pet " + petName + " has been driven to madness by your neglect, and has killed itself out of despair.");
+        }
+        if(happiness > 1) {
+            endGame("Your pet " + petName + " has become over excited and died of a heart attack.");
         }
     }
 
