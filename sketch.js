@@ -20,7 +20,10 @@ let gameStatus = STATUS_INPLAY;
 
 let petImage;
 let foodBowlImage;
-let foodHeartImage;
+let heartImage;
+
+let showingFoodBowl = false
+let showingHeart = false
 
 let startButton;
 let resetGameButton;
@@ -40,7 +43,7 @@ let gameoverMessage = "The game is over";
 function preload() {
     petImage = loadImage('assets/runebear.png');
     foodBowlImage = loadImage('assets/foodbowl.png');
-    foodHeartImage = loadImage('assets/foodheart.png');
+    heartImage = loadImage('assets/foodheart.png');
 }
 
 function setup() {
@@ -61,14 +64,14 @@ function setup() {
     kissButton.mousePressed(kiss);
 
     uploadButton = createButton('Upload a pet');
-    uploadButton.position(650, 45);
+    uploadButton.position(CANVAS_WIDTH - 150, CANVAS_HEIGHT - 45);
     uploadButton.mousePressed(mockUpload);
 
     resetGameButton = createButton('New Game');
     resetGameButton.position(200, 500)
     resetGameButton.mousePressed(resetGame);
 
-    startButton = createButton('Start Game');
+    startButton = createButton('Begin your pet\'s life!');
     startButton.position(200, 500)
     startButton.mousePressed(changePet);
 
@@ -102,24 +105,18 @@ function resetGame() {
     nameInput.hide();
 }
 
-showingFoodBowl = false
-showingFoodHeart = false
-
 function feed() {
-    showingFoodBowl = false
-    showingFoodHeart = false    
     food += 0.05
-    // Display a bowl of food emoticon and then a heart.
+    
     showingFoodBowl = true
-    setTimeout(() => {showingFoodBowl = false; showingFoodHeart = true;}, 1500)
-    setTimeout(() => {showingFoodHeart = false}, 3000)
+    setTimeout(() => {showingFoodBowl = false}, 1500)
 }
 
 function kiss(){
     happiness += 0.1
     // Display a bowl of food emoticon and then a heart.
-    showingFoodHeart = true
-    setTimeout(() => {showingFoodHeart = false}, 1500)
+    showingHeart = true
+    setTimeout(() => {showingHeart = false}, 1500)
 }
 
 function draw()
@@ -155,6 +152,29 @@ function draw()
         rect(125+2, 45+2, 196 * food, 10-4)
         rect(125+2, 65+2, 196 * happiness, 10-4)
         rect(125+2, 85+2, 196 * (1-age), 10-4)
+
+        if(food > 1) {
+            endGame("You have overfed your pet " + petName + ". For this gluttony, the beast has been condemned to death.");
+        }
+        else if(food < 0) {
+            endGame("Through your fault alone, your pet " + petName + " has succumbed to starvation and died.");
+        }
+        if(age > 1) {
+            endGame("The cold maw of time has at last devoured your pet " + petName + " raw. Your pet has expired of old age.");
+        }
+        if(happiness < 0) {
+            endGame("Your pet " + petName + " has been driven to madness by your neglect, and has killed itself out of despair.");
+        }
+        if(happiness > 1) {
+            endGame("Your pet " + petName + " has become over-excited and died of a heart attack.");
+        }
+
+        // draw emoticons
+        if(showingFoodBowl)
+            image(foodBowlImage, 75, 150, 150, 150);
+        if(showingHeart)
+            image(heartImage, 75, 150, 150, 150);
+
         // tooltips
         if(mouseX > 125 - 5 && mouseX < 125 + 200 + 5 && mouseY > 45 - 5 && mouseY < 45 + 10 + 5) {
             push();
@@ -183,28 +203,6 @@ function draw()
             text("Senescence is the process by which biological agents die of old age.\nThere is nothing you can do to mitigate this: " + (1-age).toFixed(2)*100 + "%", mouseX, mouseY-20)
             pop();
         }
-
-        if(food > 1) {
-            endGame("You have overfed your pet " + petName + ". For this gluttony, the beast has been condemned to death.");
-        }
-        else if(food < 0) {
-            endGame("Through your fault alone, your pet " + petName + " has succumbed to starvation and died.");
-        }
-        if(age > 1) {
-            endGame("The cold maw of time has at last devoured your pet " + petName + " raw. Your pet has expired of old age.");
-        }
-        if(happiness < 0) {
-            endGame("Your pet " + petName + " has been driven to madness by your neglect, and has killed itself out of despair.");
-        }
-        if(happiness > 1) {
-            endGame("Your pet " + petName + " has become over excited and died of a heart attack.");
-        }
-
-        // draw emoticons
-        if(showingFoodBowl)
-            image(foodBowlImage, 75, 150, 150, 150);
-        if(showingFoodHeart)
-            image(foodHeartImage, 75, 150, 150, 150);
     }
 
     if(gameStatus === STATUS_UPLOADING){
