@@ -187,13 +187,13 @@ function draw()
         if(happiness > 1) {
             endGame("Your pet " + petName + " has become over excited and died of a heart attack.");
         }
-    }
 
-    // draw emoticons
-    if(showingFoodBowl)
-        image(foodBowlImage, 75, 150, 150, 150);
-    if(showingFoodHeart)
-        image(foodHeartImage, 75, 150, 150, 150);
+        // draw emoticons
+        if(showingFoodBowl)
+            image(foodBowlImage, 75, 150, 150, 150);
+        if(showingFoodHeart)
+            image(foodHeartImage, 75, 150, 150, 150);
+    }
 
     if(gameStatus === STATUS_GAMEOVER) {
         displayGameover();
