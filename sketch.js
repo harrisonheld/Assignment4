@@ -28,8 +28,8 @@ let happiness = 0.5;
 let age = 0.0;
 
 let petName = 'Rune Bear';
-let lifespan = 60; // how many seconds the pet lives
-let hungerspeed = 60; // how many seconds it takes for the pet to starve
+let lifespan = 240; // how many seconds the pet lives
+let hungerspeed = 120; // how many seconds it takes for the pet to starve
 
 let gameoverMessage = "The game is over";
 
@@ -55,6 +55,10 @@ function setup() {
     kissButton = createButton('Kiss your pet');
     kissButton.position(125, CANVAS_HEIGHT - 45);
     kissButton.mousePressed(kiss);
+
+    uploadButton = createButton('Upload a pet');
+    uploadButton.position(650, 45);
+    uploadButton.mousePressed(mockUpload);
 
     resetGameButton = createButton('New Game');
     resetGameButton.position(200, 500)
@@ -86,7 +90,7 @@ showingFoodHeart = false
 function feed() {
     showingFoodBowl = false
     showingFoodHeart = false    
-    food += 0.1
+    food += 0.05
     // Display a bowl of food emoticon and then a heart.
     showingFoodBowl = true
     setTimeout(() => {showingFoodBowl = false; showingFoodHeart = true;}, 1500)
@@ -98,6 +102,12 @@ function kiss(){
     // Display a bowl of food emoticon and then a heart.
     showingFoodHeart = true
     setTimeout(() => {showingFoodHeart = false}, 1500)
+}
+
+function mockUpload(){
+    petImage = loadImage('assets/reveille.jpeg')
+    petName = 'Reveille'
+    resetGame();
 }
 
 function draw()
