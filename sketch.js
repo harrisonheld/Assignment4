@@ -14,6 +14,7 @@ let COLOR_STATUS_BAR_FILLED;
 let COLOR_MAROON;
 
 let STATUS_INPLAY = "STATUS_INPLAY";
+let STATUS_UPLOADING = "STATUS_UPLOADING";
 let STATUS_GAMEOVER = "STATUS_GAMEOVER";
 let gameStatus = STATUS_INPLAY;
 
@@ -21,14 +22,17 @@ let petImage;
 let foodBowlImage;
 let foodHeartImage;
 
+let startButton;
 let resetGameButton;
+let fileButton;
+let nameInput;
 
 let food = 0.5;
 let happiness = 0.5;
 let age = 0.0;
 
 let petName = 'Rune Bear';
-let lifespan = 240; // how many seconds the pet lives
+let lifespan = 180; // how many seconds the pet lives
 let hungerspeed = 120; // how many seconds it takes for the pet to starve
 
 let gameoverMessage = "The game is over";
@@ -64,6 +68,17 @@ function setup() {
     resetGameButton.position(200, 500)
     resetGameButton.mousePressed(resetGame);
 
+    startButton = createButton('Start Game');
+    startButton.position(200, 500)
+    startButton.mousePressed(changePet);
+
+    fileButton = createButton('Upload file');
+    fileButton.position(100, 300)
+
+    nameInput = createInput();
+    nameInput.position(225, 400);
+    nameInput.value('Reveille');
+
     // decrease stats over time
     decayInterval = 100 // how often to alter stats, in milliseconds
     setInterval(() => {
@@ -82,6 +97,9 @@ function resetGame() {
     age = 0.0;
     gameStatus = STATUS_INPLAY;
     resetGameButton.hide();
+    startButton.hide();
+    fileButton.hide();
+    nameInput.hide();
 }
 
 showingFoodBowl = false
@@ -102,12 +120,6 @@ function kiss(){
     // Display a bowl of food emoticon and then a heart.
     showingFoodHeart = true
     setTimeout(() => {showingFoodHeart = false}, 1500)
-}
-
-function mockUpload(){
-    petImage = loadImage('assets/reveille.jpeg')
-    petName = 'Reveille'
-    resetGame();
 }
 
 function draw()
@@ -195,6 +207,10 @@ function draw()
             image(foodHeartImage, 75, 150, 150, 150);
     }
 
+    if(gameStatus === STATUS_UPLOADING){
+        displayUpload();
+    }
+
     if(gameStatus === STATUS_GAMEOVER) {
         displayGameover();
     }
@@ -204,6 +220,34 @@ function endGame(reason) {
     gameStatus = STATUS_GAMEOVER;
     gameoverMessage = reason;
     resetGameButton.show();
+}
+
+function mockUpload(){
+    gameStatus = STATUS_UPLOADING;
+    startButton.show();
+    fileButton.show();
+    nameInput.show();
+}
+
+function changePet(){
+    petImage = loadImage('assets/reveille.jpeg')
+    petName = 'Reveille'
+    resetGame();
+}
+
+function displayUpload() {
+    fill(0)
+    rect(75, 75, CANVAS_WIDTH - 150, CANVAS_HEIGHT - 150)
+    fill(255)
+    textSize(50)
+    text('UPLOAD YOUR PET', 100, 150)
+
+    textSize(20)
+    text("Accepts jpeg and png files", 100, 200, CANVAS_WIDTH - 150 - 100, CANVAS_HEIGHT - 200)
+
+    text("reveille.jpeg", 200, 300, CANVAS_WIDTH - 150 - 100, CANVAS_HEIGHT - 200)
+
+    text("Pet's Name", 100, 400, CANVAS_WIDTH - 150 - 100, CANVAS_HEIGHT - 200)
 }
 
 function displayGameover() {
