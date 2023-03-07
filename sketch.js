@@ -32,8 +32,8 @@ let happiness = 0.5;
 let age = 0.0;
 
 let petName = 'Rune Bear';
-let lifespan = 180; // how many seconds the pet lives
-let hungerspeed = 120; // how many seconds it takes for the pet to starve
+let lifespan = 45; // how many seconds the pet lives
+let hungerspeed = 60; // how many seconds it takes for the pet to starve
 
 let gameoverMessage = "The game is over";
 
