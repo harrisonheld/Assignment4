@@ -22,11 +22,15 @@ let petImage;
 let foodBowlImage;
 let heartImage;
 
+let pastPetsImage;
+
 let showingFoodBowl = false
 let showingHeart = false
 
 let showStats = false;
 let showStatsButton;
+let showPastPets = false;
+let showPastPetsButton;
 let hungerIcon;
 let happinessIcon;
 let ageIcon;
@@ -54,6 +58,8 @@ function preload() {
     hungerIcon = loadImage('assets/hungericon.png');
     happinessIcon = loadImage('assets/hapinessicon.png');
     ageIcon = loadImage('assets/ageicon.png');
+
+    pastPetsImage = loadImage('assets/pastpets.png');
 }
 
 function setup() {
@@ -68,6 +74,10 @@ function setup() {
     showStatsButton = createButton('Toggle Stats');
     showStatsButton.position(CANVAS_WIDTH-20 - showStatsButton.width, 20);
     showStatsButton.mousePressed(() => showStats = !showStats);
+
+    showPastPetsButton = createButton('Toggle Past Pets');
+    showPastPetsButton.position(CANVAS_WIDTH-20 - showPastPetsButton.width - 20 - showStatsButton.width, 20);
+    showPastPetsButton.mousePressed(() => showPastPets = !showPastPets);
 
     feedButton = createButton('Feed your pet');
     feedButton.position(20, CANVAS_HEIGHT - 45);
@@ -206,6 +216,10 @@ function draw()
             text(age.toFixed(2)*100 + "%", textX, 160);
         }
 
+        if(showPastPets) {
+            image(pastPetsImage,0,0);
+        }
+
         // tooltips
         if(mouseX > 125 - 5 && mouseX < 125 + 200 + 5 && mouseY > 45 - 5 && mouseY < 45 + 10 + 5) {
             push();
@@ -273,9 +287,7 @@ function displayUpload() {
 
     textSize(20)
     text("Accepts jpeg and png files", 100, 200, CANVAS_WIDTH - 150 - 100, CANVAS_HEIGHT - 200)
-
     text("reveille.jpeg", 200, 300, CANVAS_WIDTH - 150 - 100, CANVAS_HEIGHT - 200)
-
     text("Pet's Name", 100, 400, CANVAS_WIDTH - 150 - 100, CANVAS_HEIGHT - 200)
 }
 
