@@ -15,6 +15,7 @@ let COLOR_MAROON;
 
 let STATUS_INPLAY = "STATUS_INPLAY";
 let STATUS_UPLOADING = "STATUS_UPLOADING";
+let STATUS_CUSTOMIZE = "STATUS_CUSTOMIZE";
 let STATUS_GAMEOVER = "STATUS_GAMEOVER";
 let gameStatus = STATUS_INPLAY;
 
@@ -26,6 +27,9 @@ let pastPetsImage;
 
 let showingFoodBowl = false
 let showingHeart = false
+
+let showHat = false;
+let showTie = false;
 
 let showStats = false;
 let showStatsButton;
@@ -59,6 +63,9 @@ function preload() {
     happinessIcon = loadImage('assets/hapinessicon.png');
     ageIcon = loadImage('assets/ageicon.png');
 
+    hatIcon = loadImage('assets/hat.png');
+    tieIcon = loadImage('assets/bowtie.png');
+
     pastPetsImage = loadImage('assets/pastpets.png');
 }
 
@@ -87,6 +94,10 @@ function setup() {
     kissButton.position(125, CANVAS_HEIGHT - 45);
     kissButton.mousePressed(kiss);
 
+    customizeButton = createButton('Customize your pet');
+    customizeButton.position(225, CANVAS_HEIGHT - 45);
+    customizeButton.mousePressed(customMenu);
+
     uploadButton = createButton('Upload a pet');
     uploadButton.position(CANVAS_WIDTH - 150, CANVAS_HEIGHT - 45);
     uploadButton.mousePressed(mockUpload);
@@ -98,6 +109,18 @@ function setup() {
     startButton = createButton('Begin your pet\'s life!');
     startButton.position(200, 500)
     startButton.mousePressed(changePet);
+
+    hatButton = createButton('Toggle Hat');
+    hatButton.position(50, 10)
+    hatButton.mousePressed(() => showHat = !showHat);
+
+    tieButton = createButton('Toggle Bowtie');
+    tieButton.position(50, 50)
+    tieButton.mousePressed(() => showTie = !showTie);
+
+    cancelCustomButton = createButton('Exit');
+    cancelCustomButton.position(50, 100)
+    cancelCustomButton.mousePressed(resetGame);
 
     fileButton = createButton('Upload file');
     fileButton.position(100, 300)
@@ -126,6 +149,9 @@ function resetGame() {
     resetGameButton.hide();
     startButton.hide();
     fileButton.hide();
+    hatButton.hide();
+    tieButton.hide();
+    cancelCustomButton.hide();
     nameInput.hide();
 }
 
@@ -257,12 +283,39 @@ function draw()
     if(gameStatus === STATUS_GAMEOVER) {
         displayGameover();
     }
+
+    if(gameStatus === STATUS_CUSTOMIZE) {
+        fill(0)
+        rect(0,0,150,150);
+        iconX = 0;
+        image(hatIcon, iconX,0, 40, 40)
+        image(tieIcon, iconX,40, 40, 40)
+        fill(255)
+        textSize(40)
+        textX = iconX + 40;
+        // write rounded stats as percentage
+    }
+
+    if(showHat){
+        image(hatIcon, 300, 200, 100,100);
+    }
+
+    if(showTie){
+        image(tieIcon, 375, 500, 80,80);
+    }
 }
 
 function endGame(reason) {
     gameStatus = STATUS_GAMEOVER;
     gameoverMessage = reason;
     resetGameButton.show();
+}
+
+function customMenu(){
+    gameStatus = STATUS_CUSTOMIZE;
+    hatButton.show();
+    tieButton.show();
+    cancelCustomButton.show();
 }
 
 function mockUpload(){
@@ -300,7 +353,4 @@ function displayGameover() {
 
     textSize(20)
     text(gameoverMessage, 100, 200, CANVAS_WIDTH - 150 - 100, CANVAS_HEIGHT - 200)
-}
-
-function loadCamera() {
 }
